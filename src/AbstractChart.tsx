@@ -43,17 +43,20 @@ class AbstractChart<
   IState extends AbstractChartState
 > extends Component<AbstractChartProps & IProps, AbstractChartState & IState> {
   calcScaler = (data: number[]) => {
-    let min, max;
+    let minMaxValues = [];
     if (this.props.fromZero) {
-      min = Math.min(...data, 0);
-      max = Math.max(...data, 0);
+      minMaxValues.push(0);
     } else if (this.props.fromNumber) {
-      min = Math.min(...data, this.props.fromNumber);
-      max = Math.max(...data, this.props.fromNumber);
-    } else {
-      min = Math.min(...data);
-      max = Math.max(...data);
+      minMaxValues.push(this.props.fromNumber);
     }
+    if (this.props.toNumber) {
+      minMaxValues.push(this.props.toNumber);
+    }
+    var minMaxValues = minMaxValues.filter(function(val) {
+      return val !== null
+    });
+    const min = Math.min(...data, ...minMaxValues);
+    const max = Math.max(...data, ...minMaxValues);
     return max - min || 1;
   };
 

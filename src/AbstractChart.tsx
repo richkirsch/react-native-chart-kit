@@ -6,6 +6,7 @@ import { ChartConfig, Dataset, PartialBy } from "./HelperTypes";
 export interface AbstractChartProps {
   fromZero?: boolean;
   fromNumber?: number;
+  toNumber?: number;
   chartConfig?: AbstractChartConfig;
   yAxisLabel?: string;
   yAxisSuffix?: string;
@@ -42,19 +43,22 @@ class AbstractChart<
   IState extends AbstractChartState
 > extends Component<AbstractChartProps & IProps, AbstractChartState & IState> {
   calcScaler = (data: number[]) => {
+    let min, max;
     if (this.props.fromZero) {
-      return Math.max(...data, 0) - Math.min(...data, 0) || 1;
+      min = Math.min(...data, 0);
+      max = Math.max(...data, 0);
     } else if (this.props.fromNumber) {
-      return (
-        Math.max(...data, this.props.fromNumber) -
-          Math.min(...data, this.props.fromNumber) || 1
-      );
+      min = Math.min(...data, this.props.fromNumber);
+      max = Math.max(...data, this.props.fromNumber);
     } else {
-      return Math.max(...data) - Math.min(...data) || 1;
+      min = Math.min(...data);
+      max = Math.max(...data);
     }
+    return max - min || 1;
   };
 
   calcBaseHeight = (data: number[], height: number) => {
+    /* TODO: investigate here ... */
     const min = Math.min(...data);
     const max = Math.max(...data);
     if (min >= 0 && max >= 0) {
@@ -67,9 +71,9 @@ class AbstractChart<
   };
 
   calcHeight = (val: number, data: number[], height: number) => {
+    /* TODO: ... and here! */
     const max = Math.max(...data);
     const min = Math.min(...data);
-
     if (min < 0 && max > 0) {
       return height * (val / this.calcScaler(data));
     } else if (min >= 0 && max >= 0) {

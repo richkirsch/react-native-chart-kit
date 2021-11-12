@@ -52,7 +52,7 @@ class AbstractChart<
     if (this.props.toNumber) {
       minMaxValues.push(this.props.toNumber);
     }
-    var minMaxValues = minMaxValues.filter(function(val) {
+    minMaxValues = minMaxValues.filter(function(val) {
       return val !== null
     });
     const min = Math.min(...data, ...minMaxValues);

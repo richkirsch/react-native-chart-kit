@@ -6,6 +6,7 @@ import { ChartConfig, Dataset, PartialBy } from "./HelperTypes";
 export interface AbstractChartProps {
   fromZero?: boolean;
   fromNumber?: number;
+  toNumber?: number;
   chartConfig?: AbstractChartConfig;
   yAxisLabel?: string;
   yAxisSuffix?: string;
@@ -42,16 +43,21 @@ class AbstractChart<
   IState extends AbstractChartState
 > extends Component<AbstractChartProps & IProps, AbstractChartState & IState> {
   calcScaler = (data: number[]) => {
+    let minMaxValues = [];
     if (this.props.fromZero) {
-      return Math.max(...data, 0) - Math.min(...data, 0) || 1;
+      minMaxValues.push(0);
     } else if (this.props.fromNumber) {
-      return (
-        Math.max(...data, this.props.fromNumber) -
-          Math.min(...data, this.props.fromNumber) || 1
-      );
-    } else {
-      return Math.max(...data) - Math.min(...data) || 1;
+      minMaxValues.push(this.props.fromNumber);
     }
+    if (this.props.toNumber) {
+      minMaxValues.push(this.props.toNumber);
+    }
+    minMaxValues = minMaxValues.filter(function(val) {
+      return val !== null;
+    });
+    const min = Math.min(...data, ...minMaxValues);
+    const max = Math.max(...data, ...minMaxValues);
+    return max - min || 1;
   };
 
   calcBaseHeight = (data: number[], height: number) => {
@@ -68,7 +74,9 @@ class AbstractChart<
 
   calcHeight = (val: number, data: number[], height: number) => {
     const max = Math.max(...data);
-    const min = Math.min(...data);
+    const min = this.props.fromNumber
+      ? Math.min(...data, this.props.fromNumber)
+      : Math.min(...data);
 
     if (min < 0 && max > 0) {
       return height * (val / this.calcScaler(data));
@@ -206,6 +214,9 @@ class AbstractChart<
       } else {
         const label = this.props.fromZero
           ? (this.calcScaler(data) / count) * i + Math.min(...data, 0)
+          : this.props.fromNumber
+          ? (this.calcScaler(data) / count) * i +
+            Math.min(...data, this.props.fromNumber)
           : (this.calcScaler(data) / count) * i + Math.min(...data);
         yLabel = `${yAxisLabel}${formatYLabel(
           label.toFixed(decimalPlaces)

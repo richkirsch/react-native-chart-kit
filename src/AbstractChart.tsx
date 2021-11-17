@@ -43,26 +43,16 @@ class AbstractChart<
   IState extends AbstractChartState
 > extends Component<AbstractChartProps & IProps, AbstractChartState & IState> {
   calcScaler = (data: number[]) => {
-    let minMaxValues = [];
-    if (this.props.fromZero) {
-      minMaxValues.push(0);
-    } else if (this.props.fromNumber) {
-      minMaxValues.push(this.props.fromNumber);
-    }
-    if (this.props.toNumber) {
-      minMaxValues.push(this.props.toNumber);
-    }
-    minMaxValues = minMaxValues.filter(function(val) {
-      return val !== null;
-    });
-    const min = Math.min(...data, ...minMaxValues);
-    const max = Math.max(...data, ...minMaxValues);
+    const min = this.props.fromNumber;
+    const max = this.props.toNumber;
+
     return max - min || 1;
   };
 
   calcBaseHeight = (data: number[], height: number) => {
-    const min = Math.min(...data);
-    const max = Math.max(...data);
+    const min = this.props.fromNumber;
+    const max = this.props.toNumber;
+
     if (min >= 0 && max >= 0) {
       return height;
     } else if (min < 0 && max <= 0) {
@@ -73,10 +63,8 @@ class AbstractChart<
   };
 
   calcHeight = (val: number, data: number[], height: number) => {
-    const max = Math.max(...data);
-    const min = this.props.fromNumber
-      ? Math.min(...data, this.props.fromNumber)
-      : Math.min(...data);
+    const min = this.props.fromNumber;
+    const max = this.props.toNumber;
 
     if (min < 0 && max > 0) {
       return height * (val / this.calcScaler(data));
@@ -215,8 +203,7 @@ class AbstractChart<
         const label = this.props.fromZero
           ? (this.calcScaler(data) / count) * i + Math.min(...data, 0)
           : this.props.fromNumber
-          ? (this.calcScaler(data) / count) * i +
-            Math.min(...data, this.props.fromNumber)
+          ? (this.calcScaler(data) / count) * i + this.props.fromNumber
           : (this.calcScaler(data) / count) * i + Math.min(...data);
         yLabel = `${yAxisLabel}${formatYLabel(
           label.toFixed(decimalPlaces)

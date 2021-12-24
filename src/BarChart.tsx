@@ -77,11 +77,11 @@ class BarChart extends AbstractChart<BarChartProps, BarChartState> {
       const barHeight = this.calcHeight(x, data, height);
       const barWidth = 32 * this.getBarPercentage();
       if (x === null) {
-        return <Rect key={Math.random()} width={barWidth} />;
+        return <Rect key={i} width={barWidth} />;
       }
       return (
         <Rect
-          key={Math.random()}
+          key={i}
           x={
             paddingRight +
             (i * (width - paddingRight)) / data.length +
@@ -123,7 +123,7 @@ class BarChart extends AbstractChart<BarChartProps, BarChartState> {
       const barWidth = 32 * this.getBarPercentage();
       return (
         <Rect
-          key={Math.random()}
+          key={i}
           x={
             paddingRight +
             (i * (width - paddingRight)) / data.length +
@@ -191,7 +191,7 @@ class BarChart extends AbstractChart<BarChartProps, BarChartState> {
       const barWidth = 32 * this.getBarPercentage();
       return (
         <Text
-          key={Math.random()}
+          key={i}
           x={
             paddingRight +
             (i * (width - paddingRight)) / data.length +

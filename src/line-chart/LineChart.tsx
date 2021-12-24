@@ -311,7 +311,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
 
         output.push(
           <Circle
-            key={Math.random()}
+            key={"outer" + i}
             cx={cx}
             cy={cy}
             fill={
@@ -323,7 +323,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
             {...this.getPropsForDots(x, i)}
           />,
           <Circle
-            key={Math.random()}
+            key={"inner" + i}
             cx={cx}
             cy={cy}
             r="14"
@@ -432,7 +432,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       lastIndex = index;
     });
 
-    data.forEach(dataset => {
+    data.forEach((dataset, i) => {
       if (dataset.withScrollableDot == false) return;
 
       const perData = width / dataset.data.length;
@@ -494,7 +494,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
 
       output.push([
         <Animated.View
-          key={Math.random()}
+          key={"outer" + i}
           style={[
             scrollableInfoViewStyle,
             {
@@ -520,7 +520,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
           />
         </Animated.View>,
         <AnimatedCircle
-          key={Math.random()}
+          key={"inner" + i}
           cx={translateX}
           cy={translateY}
           r={scrollableDotRadius}
@@ -774,7 +774,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     const baseLegendItemX = width / (legend.length + 1);
 
     return legend.map((legendItem, i) => (
-      <G key={Math.random()}>
+      <G key={i}>
         <LegendItem
           index={i}
           iconColor={this.getColor(datasets[i], 0.9)}

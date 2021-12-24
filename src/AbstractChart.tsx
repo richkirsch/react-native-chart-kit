@@ -141,7 +141,7 @@ class AbstractChart<
       const y = (basePosition / count) * i + paddingTop;
       return (
         <Line
-          key={Math.random()}
+          key={i}
           x1={paddingRight}
           y1={y}
           x2={width}
@@ -162,7 +162,6 @@ class AbstractChart<
     } = config;
     return (
       <Line
-        key={Math.random()}
         x1={paddingRight}
         y1={height * verticalLabelsHeightPercentage + paddingTop}
         x2={width}
@@ -222,7 +221,7 @@ class AbstractChart<
         <Text
           rotation={horizontalLabelRotation}
           origin={`${x}, ${y}`}
-          key={Math.random()}
+          key={i}
           x={x}
           textAnchor="end"
           y={y}
@@ -293,7 +292,7 @@ class AbstractChart<
         <Text
           origin={`${x}, ${y}`}
           rotation={verticalLabelRotation}
-          key={Math.random()}
+          key={i}
           x={x}
           y={y}
           textAnchor={verticalLabelRotation === 0 ? "middle" : "start"}
@@ -331,7 +330,7 @@ class AbstractChart<
       (_, i) => {
         return (
           <Line
-            key={Math.random()}
+            key={i}
             x1={Math.floor(
               ((width - paddingRight) / (data.length / yAxisInterval)) * i +
                 paddingRight
@@ -359,7 +358,6 @@ class AbstractChart<
     "height" | "paddingRight" | "paddingTop" | "verticalLabelsHeightPercentage"
   >) => (
     <Line
-      key={Math.random()}
       x1={Math.floor(paddingRight)}
       y1={0}
       x2={Math.floor(paddingRight)}
